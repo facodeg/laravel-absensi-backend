@@ -21,5 +21,19 @@ class DatabaseSeeder extends Seeder
             'email' => 'bowor4751@gmail.com',
             'password' => Hash::make('qwerqwer'),
         ]);
+
+        // data dumy for company
+        \App\Models\Company::create([
+            'name' => 'Koperasi Mitra Husada Mandiri',
+            'email' => 'mitrahusada mandiri@gmail.com',
+            'address' => 'Jl. Raya Cikarang - Cibarusah, Cikarang, Bekasi, Jawa Barat',
+            'latitude' => '-6.2780',
+            'longitude' => '107.3025',
+            'radius_km' => '0.5',
+            'time_in' => '08:00:00',
+            'time_out' => '17:00:00',
+        ]);
+
+        $this->call([AttendanceSeeder::class]);
     }
 }
