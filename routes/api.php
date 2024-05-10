@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\IzinController;
+use App\Http\Controllers\Api\NoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,21 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //company
 Route::get('/company', [CompanyController::class, 'show'])->middleware('auth:sanctum');
+
+//checkin
+Route::post('/checkin', [AttendanceController::class, 'checkin'])->middleware('auth:sanctum');
+
+//checkout
+Route::post('/checkout', [AttendanceController::class, 'checkout'])->middleware('auth:sanctum');
+
+//is checkin
+Route::get('/is-checkin', [AttendanceController::class, 'isCheckedin'])->middleware('auth:sanctum');
+
+//update profile
+Route::post('/update-profile', [AuthController::class, 'updateProfile'])->middleware('auth:sanctum');
+
+//create Izin
+Route::apiResource('/api-izins', IzinController::class)->middleware('auth:sanctum');
+
+//notes
+Route::apiResource('/api-notes', NoteController::class)->middleware('auth:sanctum');

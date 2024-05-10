@@ -33,6 +33,22 @@
             </a>
         </li>
 
+        <li class='{{ Request::is('attendances') ? 'mm-active' : '' }}'>
+            <a href="{{ route('attendances.index') }}">
+                <div class="parent-icon"><i class="bx bx-support"></i>
+                </div>
+                <div class="menu-title">Presensi</div>
+            </a>
+        </li>
+
+        <li class='{{ Request::is('izins') ? 'mm-active' : '' }}'>
+            <a href="{{ route('izins.index') }}">
+                <div class="parent-icon"><i class="bx bx-support"></i>
+                </div>
+                <div class="menu-title">Izin</div>
+            </a>
+        </li>
+
         <li class='{{ Request::is('users') ? 'mm-active' : '' }}'>
             <a href="{{ route('users.index') }}">
                 <div class="parent-icon"><i class="bx bx-support"></i>

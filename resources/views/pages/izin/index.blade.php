@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <a href="{{ route('attendances.create') }}" class="btn btn-primary px-3 ml-3">Tambah</a>
+                        <a href="{{ route('izins.create') }}" class="btn btn-primary px-3 ml-3">Tambah</a>
                     </div>
                 </div>
             </div>
@@ -35,30 +35,34 @@
                             <thead>
                                 <tr>
                                     <th>User ID</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Date</th>
-                                    <th>LatLon In</th>
-                                    <th>LatLon Out</th>
+                                    <th>Date Izin</th>
+                                    <th>Reason</th>
+                                    <th>Image</th>
+                                    <th>Is Approved</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($attendance as $user)
+                                @foreach ($izin as $izins)
                                     <tr>
-                                        <td>{{ $user->user_id }}</td>
-                                        <td>{{ $user->time_in }}</td>
-                                        <td>{{ $user->time_out }}</td>
-                                        <td>{{ $user->date }}</td>
-                                        <td>{{ $user->latlon_in }}</td>
-                                        <td>{{ $user->latlon_out }}</td>
+                                        <td>{{ $izins->user->name }}</td>
+                                        <td>{{ $izins->date_izin }}</td>
+                                        <td>{{ $izins->reason }}</td>
+                                        <td>{{ $izins->image }}</td>
+                                        <td>
+                                            @if ($izins->is_approved == 0)
+                                                Not Approved
+                                            @elseif($izins->is_approved == 1)
+                                                Approved
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="d-flex justify-content-center">
-                                                <a href='{{ route('attendances.edit', $user->id) }}'
+                                                <a href='{{ route('izins.show', $izins->id) }}'
                                                     class="btn btn-sm btn-info btn-icon">
-                                                    <i class='fadeIn animated bx bx-comment-edit'></i> Edit
+                                                    <i class='fadeIn animated bx bx-comment-edit'></i> Detail
                                                 </a>
-                                                <form action="{{ route('attendances.destroy', $user->id) }}" method="POST"
+                                                <form action="{{ route('izins.destroy', $izins->id) }}" method="POST"
                                                     class="ml-2">
                                                     <input type="hidden" name="_method" value="DELETE" />
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -74,11 +78,10 @@
                             <tfoot>
                                 <tr>
                                     <th>User ID</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Date</th>
-                                    <th>LatLon In</th>
-                                    <th>LatLon Out</th>
+                                    <th>Date Izin</th>
+                                    <th>Reason</th>
+                                    <th>Image</th>
+                                    <th>Is Approved</th>
                                     <th>Action</th>
                                 </tr>
                             </tfoot>
@@ -91,8 +94,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
