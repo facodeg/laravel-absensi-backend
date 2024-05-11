@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="input50" class="col-sm-3 col-form-label">Phone No</label>
+                            <label for="input50" class="col-sm-3 col-form-label">Phone Nomer</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class='bx bx-microphone'></i></span>
