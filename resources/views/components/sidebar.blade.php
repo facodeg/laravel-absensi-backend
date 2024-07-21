@@ -49,6 +49,22 @@
             </a>
         </li>
 
+        <li class='{{ Request::is('notes') ? 'mm-active' : '' }}'>
+            <a href="{{ route('notes.index') }}">
+                <div class="parent-icon"><i class="bx bx-support"></i>
+                </div>
+                <div class="menu-title">Catatan</div>
+            </a>
+        </li>
+
+        <li class='{{ Request::is('pegawais') ? 'mm-active' : '' }}'>
+            <a href="{{ route('pegawais.index') }}">
+                <div class="parent-icon"><i class="bx bx-support"></i>
+                </div>
+                <div class="menu-title">Pegawai</div>
+            </a>
+        </li>
+
         <li class='{{ Request::is('users') ? 'mm-active' : '' }}'>
             <a href="{{ route('users.index') }}">
                 <div class="parent-icon"><i class="bx bx-support"></i>

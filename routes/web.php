@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IzinController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,9 +14,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', function () {
-        return view('pages.dashboard', ['type_menu' => 'home']);
-    })->name('home');
+    // Route::get('/home', function () {
+    //     return view('pages.dashboard', ['type_menu' => 'home']);
+    // })->name('home');
+
+    Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
     Route::resource('users', UserController::class);
 
@@ -25,4 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
     //izin
     Route::resource('izins', IzinController::class);
+
+    Route::resource('notes', NoteController::class);
+    Route::resource('pegawais', PegawaiController::class);
 });

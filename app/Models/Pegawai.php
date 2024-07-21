@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Pegawai extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content'];
-
+    protected $fillable = [
+        'user_id', 'nip',  'alamat', 'jabatan', 'tanggal_lahir', 'pendidikan'
+    ];
 
     public function user()
     {
