@@ -14,33 +14,31 @@
                     <table class="table table-striped table-bordered" id="example2">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Date</th>
+                                <th>Nama</th>
                                 <th>Time In</th>
+                                <th>Time In Status</th>
                                 <th>Time Out</th>
-                                <th>Status</th>
+                                <th>Time Out Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($attendances as $attendance)
+                            @foreach ($attendances as $item)
                                 <tr>
-                                    <td>{{ $attendance->user->name }}</td>
-                                    <td>{{ $attendance->user->email }}</td>
-                                    <td>{{ $attendance->date }}</td>
-                                    <td>{{ $attendance->time_in }}</td>
-                                    <td>{{ $attendance->time_out }}</td>
-                                    <td>
-                                        @php
-                                            $status = 'Tepat Waktu';
-                                            if ($attendance->time_in > $company->time_in) {
-                                                $status = 'Terlambat';
-                                            } elseif ($attendance->time_out < $company->time_out) {
-                                                $status = 'Pulang Cepat';
-                                            }
-                                        @endphp
-                                        <div class="badge rounded-pill bg-{{ $status == 'Tepat Waktu' ? 'success' : ($status == 'Terlambat' ? 'warning' : 'info') }} text-dark w-100">{{ $status }}</div>
+                                    <td>{{ $item->user->name }}</td>
+                                    <td>{{ $item->time_in }}</td>
+                                    <td class="{{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'bg-danger text-white' : 'bg-success text-white' }}">
+                                        <span class=" {{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'bg-danger' : 'bg-success' }}">
+                                            {{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'Terlambat' : 'Sesuai' }}
+                                        </span>
                                     </td>
+                                    <td>{{ $item->time_out }}</td>
+                                    <td class="{{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'bg-warning text-dark' : 'bg-success text-white' }}">
+                                        <span class=" {{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'bg-warning text-dark' : 'bg-success' }}">
+                                            {{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'Pulang Cepat' : 'Sesuai' }}
+                                        </span>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -60,7 +58,6 @@
                     <div class="card radius-10">
                         <div class="card-body">
                             <div id="attendanceChart"></div>
-
                         </div>
                     </div>
                 </div>
@@ -74,12 +71,9 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
-
 
     <script>
         $(document).ready(function() {
@@ -139,21 +133,17 @@
                 }]
             });
 
-            // Data for attendance (late and early leave)
+            // Data for attendance (late, early leave, and on-time)
             var attendanceData = @json($attendances);
 
-            var lateData = attendanceData.filter(function(item) {
-                return item.time_in > '{{ $company->time_in }}';
-            }).length;
-
-            var earlyLeaveData = attendanceData.filter(function(item) {
-                return item.time_out < '{{ $company->time_out }}';
-            }).length;
+            var lateCount = @json($lateCount);
+            var earlyLeaveCount = @json($earlyLeaveCount);
+            var onTimeCount = @json($onTimeCount);
 
             var attendanceOptions = {
                 series: [{
                     name: 'Jumlah',
-                    data: [lateData, earlyLeaveData]
+                    data: [lateCount, earlyLeaveCount, onTimeCount]
                 }],
                 chart: {
                     type: 'bar',
@@ -170,21 +160,21 @@
                     enabled: false
                 },
                 xaxis: {
-                    categories: ['Terlambat', 'Pulang Cepat'],
+                    categories: ['Terlambat', 'Pulang Cepat', 'Sesuai'],
                 }
             };
 
             var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), attendanceOptions);
             attendanceChart.render();
 
-            // Highcharts Pie Chart for Late and Early Leave
+            // Highcharts Pie Chart for Late, Early Leave, and On-Time
             Highcharts.chart('lateEarlyChart', {
                 chart: {
                     type: 'pie',
                     height: 350
                 },
                 title: {
-                    text: 'Distribusi Terlambat dan Pulang Cepat'
+                    text: 'Distribusi Terlambat, Pulang Cepat, dan Sesuai'
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -209,10 +199,13 @@
                     colorByPoint: true,
                     data: [{
                         name: 'Terlambat',
-                        y: lateData
+                        y: lateCount
                     }, {
                         name: 'Pulang Cepat',
-                        y: earlyLeaveData
+                        y: earlyLeaveCount
+                    }, {
+                        name: 'Sesuai',
+                        y: onTimeCount
                     }]
                 }]
             });

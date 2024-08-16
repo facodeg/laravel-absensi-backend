@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'attendance')
+@section('title', 'Attendance')
 
 @section('main')
     <div class="page-wrapper">
@@ -9,7 +9,7 @@
                 <div class="card-body p-3">
                     <!--breadcrumb-->
                     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                        <div class="breadcrumb-title pe-3 mb-3">Tables</div>
+                        <div class="breadcrumb-title pe-3 mb-3">Attendance</div>
                         <div class="ps-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
@@ -21,12 +21,12 @@
                         </div>
                     </div>
                     <div class="col">
-                        <a href="{{ route('attendances.create') }}" class="btn btn-primary px-3 ml-3">Tambah</a>
+                        <a href="{{ route('attendances.create') }}" class="btn btn-primary px-3 ml-3">Tambah Attendance</a>
                     </div>
                 </div>
             </div>
 
-            <h6 class="mb-0 text-uppercase">DataTable Import</h6>
+            <h6 class="mb-0 text-uppercase">Data Attendance</h6>
             <hr />
             <div class="card">
                 <div class="card-body">
@@ -34,34 +34,44 @@
                         <table id="example2" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>Nama</th>
                                     <th>Time In</th>
+                                    <th>Time In Status</th>
                                     <th>Time Out</th>
+                                    <th>Time Out Status</th>
                                     <th>Date</th>
-                                    <th>LatLon In</th>
-                                    <th>LatLon Out</th>
+
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($attendance as $user)
+                                @foreach ($attendance as $item)
                                     <tr>
-                                        <td>{{ $user->user_id }}</td>
-                                        <td>{{ $user->time_in }}</td>
-                                        <td>{{ $user->time_out }}</td>
-                                        <td>{{ $user->date }}</td>
-                                        <td>{{ $user->latlon_in }}</td>
-                                        <td>{{ $user->latlon_out }}</td>
+                                        <td>{{ $item->user->name }}</td>
+                                        <td>{{ $item->time_in }}</td>
+                                        <td class="{{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'bg-danger text-white' : 'bg-success text-white' }}">
+                                            <span class=" {{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'bg-danger' : 'bg-success' }}">
+                                                {{ Carbon\Carbon::parse($item->time_in)->gt(Carbon\Carbon::parse($company->time_in)) ? 'Terlambat' : 'Sesuai' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $item->time_out }}</td>
+                                        <td class="{{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'bg-warning text-dark' : 'bg-success text-white' }}">
+                                            <span class=" {{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'bg-warning text-dark' : 'bg-success' }}">
+                                                {{ Carbon\Carbon::parse($item->time_out)->lt(Carbon\Carbon::parse($company->time_out)) ? 'Pulang Cepat' : 'Sesuai' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }}</td>
+
                                         <td>
                                             <div class="d-flex justify-content-center">
-                                                <a href='{{ route('attendances.edit', $user->id) }}'
+                                                <a href="{{ route('attendances.edit', $item->id) }}"
                                                     class="btn btn-sm btn-info btn-icon">
                                                     <i class='fadeIn animated bx bx-comment-edit'></i> Edit
                                                 </a>
-                                                <form action="{{ route('attendances.destroy', $user->id) }}" method="POST"
+                                                <form action="{{ route('attendances.destroy', $item->id) }}" method="POST"
                                                     class="ml-2">
-                                                    <input type="hidden" name="_method" value="DELETE" />
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    @csrf
+                                                    @method('DELETE')
                                                     <button class="btn btn-sm btn-danger btn-icon confirm-delete">
                                                         <i class="fadeIn animated bx bx-trash-alt"></i> Delete
                                                     </button>
@@ -73,12 +83,13 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>Nama</th>
                                     <th>Time In</th>
+                                    <th>Time In Status</th>
                                     <th>Time Out</th>
+                                    <th>Time Out Status</th>
                                     <th>Date</th>
-                                    <th>LatLon In</th>
-                                    <th>LatLon Out</th>
+
                                     <th>Action</th>
                                 </tr>
                             </tfoot>
@@ -97,15 +108,13 @@
     <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var table = $('#example2').DataTable({
+            $('#example2').DataTable({
                 lengthChange: true,
                 buttons: ['copy', 'excel', 'pdf', 'print']
             });
-
-            table.buttons().container()
-                .appendTo('#example2_wrapper .col-md-6:eq(0)');
         });
     </script>
 @endpush

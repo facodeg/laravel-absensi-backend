@@ -72,6 +72,14 @@
                 <div class="menu-title">User</div>
             </a>
         </li>
+
+        <li class='{{ Request::is('reports/monthly') ? 'mm-active' : '' }}'>
+            <a href="{{ route('reports.monthly') }}">
+                <div class="parent-icon"><i class="bx bx-calendar"></i></div>
+                <div class="menu-title">Laporan Presensi Bulanan</div>
+            </a>
+        </li>
+
     </ul>
     <!--end navigation-->
 </div>

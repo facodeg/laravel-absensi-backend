@@ -45,9 +45,7 @@
                                         <td>
                                             <div class="d-flex justify-content-center">
 
-                                                <a href="{{ route('notes.edit', $note->id) }}" class="btn btn-sm btn-warning btn-icon ml-2">
-                                                    <i class='fadeIn animated bx bx-edit-alt'></i> Edit
-                                                </a>
+
                                                 <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="ml-2">
                                                     @csrf
                                                     @method('DELETE')

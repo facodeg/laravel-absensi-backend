@@ -2,9 +2,7 @@
 
 @section('title', 'Users')
 
-
 @section('main')
-
     <div class="page-wrapper">
         <div class="page-content">
             <div class="card">
@@ -21,9 +19,8 @@
                                 </ol>
                             </nav>
                         </div>
-
                     </div>
-                    <div class="col ">
+                    <div class="col">
                         <a href="{{ route('users.create') }}" class="btn btn-primary px-3 ml-3">Tambah</a>
                     </div>
                 </div>
@@ -32,14 +29,12 @@
             <h6 class="mb-0 text-uppercase">DataTable Import</h6>
             <hr />
             <div class="card">
-
                 <div class="card-body">
-
-
                     <div class="table-responsive">
                         <table id="example2" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Photo</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
@@ -50,21 +45,24 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
-
-                                        <td>{{ $user->name }}
-                                        </td>
                                         <td>
-                                            {{ $user->email }}
+                                            <div>
+                                                <img src="{{ asset('storage/' . $user->imageUrl) }}"
+                                                    class="rounded-circle"
+                                                    width="46"
+                                                    height="46"
+                                                    alt="User Photo" />
+                                            </div>
                                         </td>
-                                        <td>
-                                            {{ $user->phone }}
-                                        </td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->phone }}</td>
                                         <td>{{ $user->created_at }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center">
-                                                <a href='{{ route('users.edit', $user->id) }}'
+                                                <a href="{{ route('users.edit', $user->id) }}"
                                                     class="btn btn-sm btn-info btn-icon">
-                                                    <i class='fadeIn animated bx bx-comment-edit'></i>
+                                                    <i class="fadeIn animated bx bx-comment-edit"></i>
                                                     Edit
                                                 </a>
 
@@ -83,6 +81,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th>Photo</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
@@ -96,10 +95,6 @@
             </div>
         </div>
     </div>
-
-
-
-
 @endsection
 
 @push('scripts')
@@ -109,8 +104,6 @@
     <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
-
-
 
     <script>
         $(document).ready(function() {

@@ -66,8 +66,82 @@
 
                         </div>
                     </li>
+
+                    <li class="{{ Request::is('home') ? 'mm-active' : '' }}">
+                        @if(Request::is('home'))
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown">
+                                <span class="alert-count">{{ $noteCount }}</span> <!-- Menampilkan total jumlah catatan -->
+                                <i class='bx bx-book'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:;">
+                                    <div class="msg-header">
+                                        <p class="msg-header-title">Notifications</p>
+                                        <p class="msg-header-badge">{{ $noteCount }} New</p>
+                                    </div>
+                                </a>
+                                <div class="header-notifications-list">
+                                    @foreach ($noteData->take(8) as $note) <!-- Menampilkan 8 notifikasi terbaru -->
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">{{ $note->title }}<span class="msg-time float-end">{{ $note->created_at->diffForHumans() }}</span></h6>
+                                                    <p class="msg-info">{{ $note->note }}</p> <!-- Menampilkan isi catatan -->
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <a href="javascript:;">
+                                    <div class="text-center msg-footer">
+                                        <button class="btn btn-primary w-100">View All Notifications</button>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+
+                            <li class="nav-item dropdown dropdown-large">
+                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown">
+                                    <span class="alert-count">{{ $unapprovedIzinCount }}</span>
+                                    <i class='bx bx-bell'></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:;">
+                                        <div class="msg-header">
+                                            <p class="msg-header-title">Notifications</p>
+                                            <p class="msg-header-badge">{{ $unapprovedIzinCount }} New</p>
+                                        </div>
+                                    </a>
+                                    <div class="header-notifications-list">
+                                        @foreach ($izinData->where('is_approved', 0)->take(8) as $izin)
+                                            <a class="dropdown-item" href="javascript:;">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="user-online">
+                                                        <img src="{{ asset('storage/izin/' . $izin->image) }}" class="msg-avatar" alt="user avatar">
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="msg-name">{{ $izin->user->name }}<span class="msg-time float-end">{{ $izin->created_at->diffForHumans() }}</span></h6>
+                                                        <p class="msg-info">{{ $izin->reason }}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                    <a href="javascript:;">
+                                        <div class="text-center msg-footer">
+                                            <button class="btn btn-primary w-100">View All Notifications</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+
+                        @endif
+                    </li>
+
                 </ul>
             </div>
+
             <div class="user-box dropdown px-3">
                 <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

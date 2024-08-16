@@ -94,7 +94,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class='bx bx-map-pin'></i></span>
-                                    <input type="number" class="form-control @error('radius_km') is-invalid @enderror"
+                                    <input type="number" step="0.01" class="form-control @error('radius_km') is-invalid @enderror"
                                         name="radius_km" value="{{ $company->radius_km }}">
                                     @error('radius_km')
                                         <div class="invalid-feedback">
@@ -135,6 +135,13 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label">Map</label>
+                            <div class="col-sm-9">
+                                <div id="map" style="height: 300px;"></div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <label class="col-sm-3 col-form-label"></label>
                             <div class="col-sm-9">
@@ -150,7 +157,78 @@
         </div>
     </div>
 
+<!-- Menyertakan Leaflet.js dan CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+<script>
+    // Inisialisasi peta menggunakan OpenStreetMap
+    var map = L.map('map').setView([{{ $company->latitude }}, {{ $company->longitude }}], 16);
+
+    // Tambahkan tile layer dari OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Menambahkan popup yang muncul saat peta diklik
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);
+    }
+
+    map.on('click', onMapClick);
+
+    // Tambahkan marker dan lingkaran radius
+    var marker = L.marker([{{ $company->latitude }}, {{ $company->longitude }}], {
+        draggable: true
+    }).addTo(map);
+
+    var circle = L.circle([{{ $company->latitude }}, {{ $company->longitude }}], {
+        color: 'red',
+        radius: {{ $company->radius_km }} * 1000 // Mengubah km ke meter
+    }).addTo(map);
+
+    // Event handler untuk marker drag
+    marker.on('dragend', function (e) {
+        var position = marker.getLatLng();
+        marker.setLatLng(position, {draggable: 'true'}).bindPopup(position).update();
+        $('input[name="latitude"]').val(position.lat).trigger('change');
+        $('input[name="longitude"]').val(position.lng).trigger('change');
+        circle.setLatLng(position);
+    });
+
+    // Event handler untuk perubahan radius
+    $('input[name="radius_km"]').on('input', function () {
+        var radius = $(this).val() * 1000; // Mengubah km ke meter
+        circle.setRadius(radius);
+    });
+
+    // Event handler untuk perubahan latitude/longitude
+    $('input[name="latitude"], input[name="longitude"]').on('input', function () {
+        var lat = $('input[name="latitude"]').val();
+        var lng = $('input[name="longitude"]').val();
+        var latlng = L.latLng(lat, lng);
+        marker.setLatLng(latlng).update();
+        map.setView(latlng, map.getZoom()); // Memperbarui tampilan peta
+        circle.setLatLng(latlng);
+    });
+
+    // Event handler untuk klik pada peta
+    map.on('click', function (e) {
+        var latlng = e.latlng;
+        marker.setLatLng(latlng).update();
+        circle.setLatLng(latlng);
+        $('input[name="latitude"]').val(latlng.lat).trigger('change');
+        $('input[name="longitude"]').val(latlng.lng).trigger('change');
+    });
+
+
+</script>
 
 
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,4 +34,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('notes', NoteController::class);
     Route::resource('pegawais', PegawaiController::class);
+
+    Route::get('/reports/monthly', [ReportController::class, 'monthlyReport'])->name('reports.monthly');
+    Route::get('/reports/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.exportPdf');
+    Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
 });

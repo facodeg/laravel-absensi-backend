@@ -20,9 +20,6 @@
                             </nav>
                         </div>
                     </div>
-                    <div class="col">
-                        <a href="{{ route('izins.create') }}" class="btn btn-primary px-3 ml-3">Tambah</a>
-                    </div>
                 </div>
             </div>
 
@@ -34,7 +31,7 @@
                         <table id="example2" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>Nama</th>
                                     <th>Date Izin</th>
                                     <th>Reason</th>
                                     <th>Image</th>
@@ -48,7 +45,13 @@
                                         <td>{{ $izins->user->name }}</td>
                                         <td>{{ $izins->date_izin }}</td>
                                         <td>{{ $izins->reason }}</td>
-                                        <td>{{ $izins->image }}</td>
+                                        <td>
+                                            @if($izins->image)
+                                                <img src="{{ asset('storage/izin/' . $izins->image) }}" alt="Image" style="max-width: 150px; max-height: 100px;">
+                                            @else
+                                                No Image
+                                            @endif
+                                        </td>
                                         <td>
                                             @if ($izins->is_approved == 0)
                                                 Not Approved
@@ -58,14 +61,14 @@
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center">
-                                                <a href='{{ route('izins.show', $izins->id) }}'
+                                                <a href='{{ route('izins.edit', $izins->id) }}'
                                                     class="btn btn-sm btn-info btn-icon">
-                                                    <i class='fadeIn animated bx bx-comment-edit'></i> Detail
+                                                    <i class='fadeIn animated bx bx-comment-edit'></i> Tindakan
                                                 </a>
                                                 <form action="{{ route('izins.destroy', $izins->id) }}" method="POST"
                                                     class="ml-2">
-                                                    <input type="hidden" name="_method" value="DELETE" />
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    @csrf
+                                                    @method('DELETE')
                                                     <button class="btn btn-sm btn-danger btn-icon confirm-delete">
                                                         <i class="fadeIn animated bx bx-trash-alt"></i> Delete
                                                     </button>

@@ -14,8 +14,14 @@ class IzinController extends Controller
     {
         //index
 
+        // Fetch all izin data
+        $izinData = Izin::with('user')->get();
+
+        // Count the number of unapproved izin
+        $unapprovedIzinCount = $izinData->where('is_approved', 0)->count();
+
         $izin = Izin::with('user')->orderBy('user_id')->get();
-        return view('pages.izin.index', compact('izin'));
+        return view('pages.izin.index', compact('izin', 'izinData', 'unapprovedIzinCount'));
     }
 
     /**

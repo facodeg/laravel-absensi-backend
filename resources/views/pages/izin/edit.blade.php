@@ -63,7 +63,7 @@
                                     <select class="form-select" name="is_approved">
                                         <option value="1" {{ $izin->is_approved == 1 ? 'selected' : '' }}>Approved
                                         </option>
-                                        <option value="0" {{ $izin->is_approved == 0 ? 'selected' : '' }}>Not Approved
+                                        <option value="0" {{ $izin->is_approved == 0 ? 'selected' : '' }}>Reject
                                         </option>
                                     </select>
                                 </div>

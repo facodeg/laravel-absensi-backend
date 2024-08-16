@@ -137,7 +137,7 @@
                         <div class="col-sm-9">
                             <div class="d-md-flex d-grid align-items-center gap-3">
                                 <button class="btn btn-primary px-4"
-                                    onclick="window.location.href='{{ route('companies.edit', $company->id) }}'">Submit</button>
+                                    onclick="window.location.href='{{ route('companies.edit', $company->id) }}'">Edit</button>
 
                             </div>
                         </div>

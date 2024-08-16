@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}">
-    <title>Syndron - Bootstrap 5 Admin Dashboard Template</title>
+    <title> Presensi Mitra Husada Mandiri </title>
 </head>
 
 <body>
